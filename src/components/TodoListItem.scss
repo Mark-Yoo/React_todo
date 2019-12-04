@@ -1,0 +1,8 @@
+.TodoListItem {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  &:nth-children(even) {
+    background: #f8f9fa;
+  }
+}
