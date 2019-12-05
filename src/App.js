@@ -21,15 +21,9 @@ function App() {
       checked: true,
     },
   ]);
-
-  const onRemove = useCallback(
-    (id) => {
-      setTodos(todos.filter(todo => todo.id !== id))
-    }, [todos],
-  )
-
+  
   const generateID = (todos ? todos.length + 1 : 1);
-
+  
   const onInsert = useCallback(
     text => {
       const todo = {
@@ -39,12 +33,27 @@ function App() {
       };
       setTodos([...todos, todo]);
     }, [generateID, todos],
-  );
+    );
+    
+    const onToggle = useCallback(
+      (id) => {
+        setTodos(todos.map(todo => 
+          todo.id === id ? {...todo, checked: !todo.checked} : todo,
+        ))
+      },
+      [todos],
+    )
 
-  return (
-    <TodoTemplate>
+    const onRemove = useCallback(
+      (id) => {
+        setTodos(todos.filter(todo => todo.id !== id))
+      }, [todos],
+    );
+
+    return (
+      <TodoTemplate>
       <TodoInsert onInsert={onInsert}/>
-      <TodoList todos={todos} onRemove={onRemove}/>
+      <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle}/>
     </TodoTemplate>
   );
 }
