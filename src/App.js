@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import TodoTemplate from './components/TodoTemplate';
 import TodoInsert from './components/TodoInserts';
 import TodoList from './components/TodoList';
@@ -22,10 +22,29 @@ function App() {
     },
   ]);
 
+  const onRemove = useCallback(
+    (id) => {
+      setTodos(todos.filter(todo => todo.id !== id))
+    }, [todos],
+  )
+
+  const generateID = (todos ? todos.length + 1 : 1);
+
+  const onInsert = useCallback(
+    text => {
+      const todo = {
+        id: generateID,
+        text,
+        checked: false,
+      };
+      setTodos([...todos, todo]);
+    }, [generateID, todos],
+  );
+
   return (
     <TodoTemplate>
-      <TodoInsert />
-      <TodoList todos={todos} />
+      <TodoInsert onInsert={onInsert}/>
+      <TodoList todos={todos} onRemove={onRemove}/>
     </TodoTemplate>
   );
 }
